@@ -1,0 +1,72 @@
+const Department = require('../Models/DepartmentModel')
+
+const getAllDepartment = async(req,res)=>{
+    try{
+        const response = await Department.find({});
+        if(!response) return res.status(401).json({message:err.message});
+        res.status(200).json(response)
+    }catch(err){
+        res.status(401).json({message:err.message})
+    }
+}
+
+const addDepartment = async(req,res)=>{
+    try{
+        const {department} = req.body;
+        const response = await Department.insertMany({department:department});
+        if(!response) return res.status(401).json({message:err.message});
+        res.status(200).json({
+            status:true,
+            message:"Added successfully"
+        })
+    }catch(err){
+        res.status(401).json({message:err.message})
+    }
+}
+
+const getOneDepartment = async(req,res)=>{
+    try{
+        const {id} = req.params;
+        const response = await Department.findOne({ _id: id});
+        if(!response) return res.status(401).json({message:err.message});
+        res.status(200).json(response);
+    }catch(err){
+        res.status(401).json({message:err.message})
+    }
+}
+
+const updateDepartment = async(req,res)=>{
+    try{
+        const {id} = req.params;
+        const {department} = req.body;
+        const response = await Department.updateOne(
+            { _id: id},      
+            { $set: { department: department } }    
+         );
+        if(!response) return res.status(401).json({message:err.message});
+        res.status(200).json({
+            status:true,
+            message:"updated"
+        })
+    }catch(err){
+        res.status(401).json({message:err.message})
+    }
+}
+
+const deleteDepartment = async(req,res)=>{
+    try{
+        const {id} = req.params;
+        const response = await Department.deleteOne(
+            { _id: id}
+         );
+        if(!response) return res.status(401).json({message:err.message});
+        res.status(200).json({
+            status:true,
+            message:"deleted"
+        })
+    }catch(err){
+        res.status(401).json({message:err.message})
+    }
+}
+
+module.exports = {addDepartment,deleteDepartment,updateDepartment,getAllDepartment,getOneDepartment}
